@@ -6,7 +6,7 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - ./data/db:/var/lib/postgresql/data
+      - /home/user/postgres_data:/var/lib/postgresql/data
     environment:
       - POSTGRES_HOST=localhost
       - POSTGRES_USER=lesson
@@ -14,9 +14,21 @@ services:
       - POSTGRES_DATABASE=lesson
     command: postgres
     restart: always
-  
+
   redis:
     image: redis:alpine3.20
     container_name: redis_cache_server
     ports:
       - "6379:6379"
+
+  web:
+    image: nginx:stable
+    volumes:
+      - ./templates:/etc/nginx/templates
+      - /var/www/html:/usr/share/nginx/html
+    ports:
+      - "80:80"
+    environment:
+      - NGINX_HOST=foobar.com
+      - NGINX_PORT=80
+        
